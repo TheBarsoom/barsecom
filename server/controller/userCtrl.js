@@ -47,10 +47,43 @@ const loginUser = asyncHandler(async (req, res) => {
 const getallUser = asyncHandler(async (req, res) => {
   try {
     const getUsers = await User.find();
-    res.json(getAllUsers);
+    res.json(getUsers);
   } catch (error) {
     throw new Error(error);
   }
 });
 
-module.exports = { createUser, loginUser, getallUser };
+const getOneUser = asyncHandler(async (req, res) => {
+    const {id}=req.params
+    try {
+      const  user= await User.findById({_id:id});
+      res.json(user);
+    } catch (error) {
+      throw new Error(error);
+    }
+  });
+
+  const deleteUser = asyncHandler(async (req, res) => {
+    const {id}=req.params
+    try {
+      const  deletedUser= await User.findByIdAndDelete({_id:id});
+      res.json(deletedUser);
+    } catch (error) {
+      throw new Error(error);
+    }
+  });
+
+  const updateUser = asyncHandler(async (req, res) => {
+    const {id}=req.params
+
+    try {
+    //   const  updatedUser= await User.findByIdAndUpdate({_id:id},{firstname:req?.body?.firstname,lastname:req?.body?.lastname,email:req?.body?.email,mobile:req?.body?.mobile},{new:true,});
+     
+    const updatedUser= await User.findByIdAndUpdate(id,req.body,{new:true})
+    res.json(updatedUser);
+    } catch (error) {
+      throw new Error(error);
+    }
+  });
+
+module.exports = { createUser, loginUser, getallUser,getOneUser,deleteUser,updateUser };

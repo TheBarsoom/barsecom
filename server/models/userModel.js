@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-const { generateHash } = require("../modules/bcrypt")
+const { generateHash, compareHash } = require("../modules/bcrypt")
 const userSchema= new mongoose.Schema({
     firstname:{
         type:String,
@@ -22,10 +22,18 @@ const userSchema= new mongoose.Schema({
         type:String,
         required:true,
     },
+    role:{
+        type:String,
+        default:"user",
+    },
 
 })
 
 // userSchema.pre(`save`,async function (next){
 //     this.password = await generateHash(this.password)
 // })
+
+userSchema.methods.isPasswordMatched = async function (enteredPassword){
+    return compareHash(enteredPassword,this.password)
+}
 module.exports=mongoose.model("User",userSchema)

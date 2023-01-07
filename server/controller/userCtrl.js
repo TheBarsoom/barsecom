@@ -79,7 +79,7 @@ const getOneUser = asyncHandler(async (req, res) => {
     try {
     //   const  updatedUser= await User.findByIdAndUpdate({_id:id},{firstname:req?.body?.firstname,lastname:req?.body?.lastname,email:req?.body?.email,mobile:req?.body?.mobile},{new:true,});
      
-    const updatedUser= await User.findByIdAndUpdate(id,req.body,{new:true})
+    const updatedUser= await User.findByIdAndUpdate(id,{...req.body, password:await generateHash(req?.body?.password)},{new:true})
     res.json(updatedUser);
     } catch (error) {
       throw new Error(error);

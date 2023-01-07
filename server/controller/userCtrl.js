@@ -55,6 +55,7 @@ const getallUser = asyncHandler(async (req, res) => {
 
 const getOneUser = asyncHandler(async (req, res) => {
     const {id}=req.params
+
     try {
       const  user= await User.findById({_id:id});
       res.json(user);
@@ -76,6 +77,9 @@ const getOneUser = asyncHandler(async (req, res) => {
   const updateUser = asyncHandler(async (req, res) => {
     const {id}=req.params
 
+    console.log(`Put User Controller`);
+    // console.log(id);
+    console.log(req.user);
     try {
     //   const  updatedUser= await User.findByIdAndUpdate({_id:id},{firstname:req?.body?.firstname,lastname:req?.body?.lastname,email:req?.body?.email,mobile:req?.body?.mobile},{new:true,});
      

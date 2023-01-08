@@ -2,7 +2,7 @@ const { sign, verify } = require("jsonwebtoken");
 const SECRET_WORD = `${process.env.JWT_SECRET}`
 
  async function createToken(id) {
-    return await sign({id}, SECRET_WORD,{expiresIn: "3d"});
+    return await sign({id}, SECRET_WORD,{expiresIn: "1d"});
 }
 
 async function checkToken(token) {

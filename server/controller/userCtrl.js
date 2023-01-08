@@ -60,14 +60,23 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logout = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  await valdiateMongoDbId(id);
+
 
   try {
-    const unblockedUser = await User.findByIdAndUpdate(id, {
-      isBlocked: false,
-    });
-    res.json({ message: `User is Unblocked successfully`, unblockedUser });
+    const cookie = req.cookies
+    if(cookie?.refresh_token) throw new Error(`no refresh token in Cookie `)
+    const refreshToken=cookie.refreshToken;
+    const user=await User.findOne({refreshToken})
+    if(!user){
+      res.clearCookie("refreshToken",{httpOnly:true,secure:true,})
+      return res.sendStatus(204)
+    }
+    await User.findOneAndUpdate(refreshToken,{
+      refreshToken:"",
+    })
+    await res.clearCookie("refreshToken",{httpOnly:true,secure:true,})
+    return res.sendStatus(204)
+   
   } catch (error) {
     throw new Error(error);
   }
